@@ -22,17 +22,18 @@ class MainWidget: public QGLWidget
 	void paintGL();
 
 	void keyPressEvent(QKeyEvent *event);
+	void keyReleaseEvent(QKeyEvent *event);
 
 	private:
 
 	void cube();
 	void move();
 
-	int keyPresses[]
+	int keyPresses[4] = {0, 0, 0, 0};
 	int time_start;
 	int time_old;
 	int d_time;
-	float velocity = 1.0;
+	float velocity = 5.0;
 	float angle = 0.0;
 	float xmove = 0.0;
 	float zmove = 0.0;

@@ -35,7 +35,6 @@ MainWidget::MainWidget(QWidget *parent)
 	: QGLWidget(parent)
 	{ // constructor
     setFocusPolicy(Qt::ClickFocus);
-
 	} // constructor
 
 // called when OpenGL context is set up
@@ -97,6 +96,7 @@ void MainWidget::paintGL()
 	{ // paintGL()
   time_start = glutGet(GLUT_ELAPSED_TIME);
   d_time = time_start - time_old;
+  this->move();
 	// clear the widget
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -139,18 +139,61 @@ void MainWidget::paintGL()
   void MainWidget::keyPressEvent(QKeyEvent *event) {
     switch (event->key()) {
       case Qt::Key_W:
-        zmove -= velocity/1000 * d_time;
+        keyPresses[0] = 1;
         break;
       case Qt::Key_S:
-        zmove += velocity/1000 * d_time;;
+        keyPresses[1] = 1;
         break;
       case Qt::Key_A:
-        xmove -= velocity/1000 * d_time;;
+        keyPresses[2] = 1;
         break;
       case Qt::Key_D:
-        xmove += velocity/1000 * d_time;;
+        keyPresses[3] = 1;
         break;
       default:
         break;
+    }
+  }
+
+  void MainWidget::keyReleaseEvent(QKeyEvent *event) {
+    switch (event->key()) {
+      case Qt::Key_W:
+        keyPresses[0] = 0;
+        break;
+      case Qt::Key_S:
+        keyPresses[1] = 0;
+        break;
+      case Qt::Key_A:
+        keyPresses[2] = 0;
+        break;
+      case Qt::Key_D:
+        keyPresses[3] = 0;
+        break;
+      default:
+        break;
+    }
+  }
+
+  void MainWidget::move() {
+    if (keyPresses[0]&&keyPresses[2]) {
+      zmove -= velocity/1000 * d_time;
+      xmove -= velocity/1000 * d_time;
+    } else if(keyPresses[0]&&keyPresses[3]) {
+      zmove -= velocity/1000 * d_time;
+      xmove += velocity/1000 * d_time;
+    } else if(keyPresses[1]&&keyPresses[2]) {
+      zmove += velocity/1000 * d_time;
+      xmove -= velocity/1000 * d_time;
+    } else if(keyPresses[1]&&keyPresses[3]) {
+      zmove += velocity/1000 * d_time;
+      xmove += velocity/1000 * d_time;
+    } else if(keyPresses[0]) {
+      zmove -= velocity/1000 * d_time;
+    } else if(keyPresses[1]) {
+      zmove += velocity/1000 * d_time;
+    } else if(keyPresses[2]) {
+      xmove -= velocity/1000 * d_time;
+    } else if(keyPresses[3]) {
+      xmove += velocity/1000 * d_time;
     }
   }
