@@ -1,2 +1,8 @@
+#build folder
+build
+
+#qmake output
 .qmake.stash
-*.o
+
+#files containing .o and moc files
+generated_files
