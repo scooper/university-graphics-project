@@ -3,8 +3,11 @@
 ######################################################################
 
 TEMPLATE = app
-TARGET = cwk2
-INCLUDEPATH += . /opt/local/include
+TARGET = build/cwk2
+OBJECTS_DIR = generated_files
+MOC_DIR = generated_files
+
+INCLUDEPATH += . src inc /opt/local/include
 
 QT += widgets opengl gui
 
@@ -22,5 +25,5 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 # Input
-HEADERS += MainWidget.h MainWindow.h
-SOURCES += Main.cpp MainWidget.cpp MainWindow.cpp
+HEADERS += inc/*
+SOURCES += src/*

@@ -21,9 +21,10 @@ MainWindow::MainWindow(QWidget *parent)
 	mainWidget = new MainWidget(this);
 	windowLayout->addWidget(mainWidget);
 
+	// set fps limit
 	timer = new QTimer();
 	connect(timer, SIGNAL(timeout()), mainWidget, SLOT(update()));
-	timer->start(1000/30);
+	timer->start(1000/60);
 
 	// create slider
 	//nVerticesSlider = new QSlider(Qt::Horizontal);

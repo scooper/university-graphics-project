@@ -27,16 +27,18 @@ class MainWidget: public QGLWidget
 	private:
 
 	void cube();
-	void move();
+	void movement();
+	void grid(int halfGridSize);
+	void jump();
 
-	int keyPresses[4] = {0, 0, 0, 0};
+	int keyPresses[5] = {0, 0, 0, 0, 0};
+	int init_jump_time = 0;
 	int time_start;
 	int time_old;
 	int d_time;
-	float velocity = 5.0;
+	float velocity = 8.0;
 	float angle = 0.0;
-	float xmove = 0.0;
-	float zmove = 0.0;
+	float move[3] = {0.0,0.0,0.0};
 	//void polygon(int, int, int, int);
 
 	}; // class GLPolygonWidget
