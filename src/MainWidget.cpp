@@ -1,9 +1,12 @@
+#ifndef GL_GLEXT_PROTOTYPES
+#define GL_GLEXT_PROTOTYPES
 #include <GL/glu.h>
 #include <GL/glut.h>
 #include <QGLWidget>
 #include <QKeyEvent>
 #include <iostream>
 #include "MainWidget.h"
+
 
 
 // Setting up material properties
@@ -40,10 +43,11 @@ MainWidget::MainWidget(QWidget *parent)
 // called when OpenGL context is set up
 void MainWidget::initializeGL()
 	{ // initializeGL()
-	// set the widget background colour
-	glClearColor(0.4, 0.4, 0.9, 0.0);
 
 
+    // set the widget background colour
+    glClearColor(0.4, 0.4, 0.9, 0.0);
+    model = new Model("models/shape.obj");
 
 	} // initializeGL()
 
@@ -57,15 +61,6 @@ void MainWidget::resizeGL(int w, int h)
   // apply lighting
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-
-	glEnable(GL_LIGHTING);
-	glEnable(GL_LIGHT0);
-	GLfloat light_pos[] = {0., 0., 10., 1.};
-	glLightfv(GL_LIGHT0, GL_POSITION, light_pos);
-  //glLightf (GL_LIGHT0, GL_SPOT_CUTOFF,20.);
-
-
-
   // perspective projection
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
@@ -107,23 +102,27 @@ void MainWidget::paintGL()
   this->movement();
 
 	// clear the widget
-  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
 	// You must set the matrix mode to model view directly before enabling the depth test
   glMatrixMode(GL_MODELVIEW);
-
-	glEnable(GL_DEPTH_TEST); // comment out depth test to observe the result
+	glEnable(GL_DEPTH_TEST);
 
 	glPushMatrix();
-	glLoadIdentity();
-        GLfloat light_pos[] = {0., 0., 10., 1.};
-        glLightfv(GL_LIGHT0, GL_POSITION, light_pos);
-        glLightf (GL_LIGHT0, GL_SPOT_CUTOFF,15.);
+    glLoadIdentity();
+    GLfloat light_pos[] = {0., 0., 10., 1.};
+    glLightfv(GL_LIGHT0, GL_POSITION, light_pos);
+    glLightf (GL_LIGHT0, GL_SPOT_CUTOFF,15.);
 	glPopMatrix();
 
   glPushMatrix();
+    //glTranslatef(0.0,2.0,0.0);
+  glPopMatrix();
+
+  glPushMatrix();
     glRotatef(angle,0.,1.,0.);
-    this->cube();
+    //this->cube();
+    model->draw();
   glPopMatrix();
   glPushMatrix();
     //std::cout << move[1] << '\n';
@@ -132,8 +131,7 @@ void MainWidget::paintGL()
     this->grid(50);
   glPopMatrix();
 
-	glLoadIdentity();
-
+  glLoadIdentity();
   // camera
   gluLookAt(0.,2.,5., 0.,0.,0., 0.,1.,0.);
 
@@ -196,27 +194,27 @@ void MainWidget::movement() {
   } else if(keyPresses[0]&&keyPresses[3]) {
     move[2] += dvelocity/1000 * d_time;
     move[0] -= dvelocity/1000 * d_time;
-    angle = 45.0;
+    angle = -45.0;
   } else if(keyPresses[1]&&keyPresses[2]) {
     move[2] -= dvelocity/1000 * d_time;
     move[0] += dvelocity/1000 * d_time;
-    angle = 45.0;
+    angle = 135.0;
   } else if(keyPresses[1]&&keyPresses[3]) {
     move[2] -= dvelocity/1000 * d_time;
     move[0] -= dvelocity/1000 * d_time;
-    angle = 45.0;
+    angle = -135.0;
   } else if(keyPresses[0]) {
     move[2] += velocity/1000 * d_time;
     angle = 0.0;
   } else if(keyPresses[1]) {
     move[2] -= velocity/1000 * d_time;
-    angle = 0.0;
+    angle = 180.0;
   } else if(keyPresses[2]) {
     move[0] += velocity/1000 * d_time;
-    angle = 0.0;
+    angle = 90.0;
   } else if(keyPresses[3]) {
     move[0] -= velocity/1000 * d_time;
-    angle = 0.0;
+    angle = -90.0;
   } else {
     //
   }
@@ -236,9 +234,9 @@ void MainWidget::movement() {
 void MainWidget::jump() {
   int t = init_jump_time;
   // gravity
-  float g = 0.05/1000;
+  float g = 0.02/1000;
   //initial vertical velocity
-  float v = -20.0/1000;
+  float v = -15.0/1000;
 
   //calculate vertical displacement
   //v * g * t^2
@@ -247,3 +245,4 @@ void MainWidget::jump() {
   move[1] = y;
   init_jump_time += d_time;
 }
+#endif

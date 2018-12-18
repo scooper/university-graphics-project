@@ -3,13 +3,22 @@
 
 #include <GL/glut.h>
 #include <GL/glu.h>
+#include <string>
+
+using namespace std;
 
 class Model {
 
   public:
 
-  Model();
-  void loadModel();
+  Model(string filename);
+  void draw();
+  GLuint _vboID;
+  GLuint _iboID;
+  size_t vsize;
+  size_t nsize;
+  size_t csize;
+  size_t numIndices;
 
   private:
 
@@ -19,7 +28,6 @@ class Model {
   int _width;
   int _height;
   int _depth;
-  GLuint _vboID;
 
 
 

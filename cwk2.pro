@@ -9,9 +9,9 @@ MOC_DIR = generated_files
 
 INCLUDEPATH += . src inc /opt/local/include
 
-QT += widgets opengl gui
+QT += widgets opengl openglextensions gui
 
-LIBS += -lGLU -lglut
+LIBS += -lGLU -lglut -lGL
 
 # The following define makes your compiler warn you if you use any
 # feature of Qt which has been marked as deprecated (the exact warnings

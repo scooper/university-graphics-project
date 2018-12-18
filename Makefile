@@ -12,10 +12,10 @@ MAKEFILE      = Makefile
 
 CC            = gcc
 CXX           = g++
-DEFINES       = -DQT_DEPRECATED_WARNINGS -DQT_NO_DEBUG -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB
+DEFINES       = -DQT_DEPRECATED_WARNINGS -DQT_NO_DEBUG -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_OPENGLEXTENSIONS_LIB -DQT_GUI_LIB -DQT_CORE_LIB
 CFLAGS        = -pipe -O2 -Wall -W -D_REENTRANT -fPIC $(DEFINES)
 CXXFLAGS      = -pipe -O2 -Wall -W -D_REENTRANT -fPIC $(DEFINES)
-INCPATH       = -I. -I. -Isrc -Iinc -I/opt/local/include -isystem /usr/include/x86_64-linux-gnu/qt5 -isystem /usr/include/x86_64-linux-gnu/qt5/QtOpenGL -isystem /usr/include/x86_64-linux-gnu/qt5/QtWidgets -isystem /usr/include/x86_64-linux-gnu/qt5/QtGui -isystem /usr/include/x86_64-linux-gnu/qt5/QtCore -Igenerated_files -isystem /usr/include/libdrm -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++
+INCPATH       = -I. -I. -Isrc -Iinc -I/opt/local/include -isystem /usr/include/x86_64-linux-gnu/qt5 -isystem /usr/include/x86_64-linux-gnu/qt5/QtOpenGL -isystem /usr/include/x86_64-linux-gnu/qt5/QtWidgets -isystem /usr/include/x86_64-linux-gnu/qt5/QtOpenGLExtensions -isystem /usr/include/x86_64-linux-gnu/qt5/QtGui -isystem /usr/include/x86_64-linux-gnu/qt5/QtCore -Igenerated_files -isystem /usr/include/libdrm -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++
 QMAKE         = /usr/lib/qt5/bin/qmake
 DEL_FILE      = rm -f
 CHK_DIR_EXISTS= test -d
@@ -38,7 +38,7 @@ DISTNAME      = cwk21.0.0
 DISTDIR = /home/bean/Documents/comp3811/cwk2/generated_files/cwk21.0.0
 LINK          = g++
 LFLAGS        = -Wl,-O1
-LIBS          = $(SUBLIBS) -lGLU -lglut -lQt5OpenGL -lQt5Widgets -lQt5Gui -lQt5Core -lGL -lpthread 
+LIBS          = $(SUBLIBS) -lGLU -lglut -lQt5OpenGL -lQt5Widgets -lQt5OpenGLExtensions -lQt5Gui -lQt5Core -lGL -lpthread 
 AR            = ar cqs
 RANLIB        = 
 SED           = sed
@@ -54,12 +54,14 @@ SOURCES       = src/Character.cpp \
 		src/Main.cpp \
 		src/MainWidget.cpp \
 		src/MainWindow.cpp \
-		src/Model.cpp generated_files/moc_MainWidget.cpp
+		src/Model.cpp \
+		src/Reader.cpp generated_files/moc_MainWidget.cpp
 OBJECTS       = generated_files/Character.o \
 		generated_files/Main.o \
 		generated_files/MainWidget.o \
 		generated_files/MainWindow.o \
 		generated_files/Model.o \
+		generated_files/Reader.o \
 		generated_files/moc_MainWidget.o
 DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/common/unix.conf \
@@ -137,11 +139,13 @@ DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		cwk2.pro inc/Character.h \
 		inc/MainWidget.h \
 		inc/MainWindow.h \
-		inc/Model.h src/Character.cpp \
+		inc/Model.h \
+		inc/Reader.h src/Character.cpp \
 		src/Main.cpp \
 		src/MainWidget.cpp \
 		src/MainWindow.cpp \
-		src/Model.cpp
+		src/Model.cpp \
+		src/Reader.cpp
 QMAKE_TARGET  = cwk2
 DESTDIR       = build/
 TARGET        = build/cwk2
@@ -150,7 +154,7 @@ TARGET        = build/cwk2
 first: all
 ####### Build rules
 
-$(TARGET):  $(OBJECTS)  
+$(TARGET): /usr/lib/x86_64-linux-gnu/libQt5OpenGLExtensions.a $(OBJECTS)  
 	@test -d build/ || mkdir -p build/
 	$(LINK) $(LFLAGS) -o $(TARGET) $(OBJECTS) $(OBJCOMP) $(LIBS)
 
@@ -230,6 +234,7 @@ Makefile: cwk2.pro /usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++/qmake.conf /u
 		cwk2.pro \
 		/usr/lib/x86_64-linux-gnu/libQt5OpenGL.prl \
 		/usr/lib/x86_64-linux-gnu/libQt5Widgets.prl \
+		/usr/lib/x86_64-linux-gnu/libQt5OpenGLExtensions.prl \
 		/usr/lib/x86_64-linux-gnu/libQt5Gui.prl \
 		/usr/lib/x86_64-linux-gnu/libQt5Core.prl
 	$(QMAKE) -o Makefile cwk2.pro
@@ -309,6 +314,7 @@ Makefile: cwk2.pro /usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++/qmake.conf /u
 cwk2.pro:
 /usr/lib/x86_64-linux-gnu/libQt5OpenGL.prl:
 /usr/lib/x86_64-linux-gnu/libQt5Widgets.prl:
+/usr/lib/x86_64-linux-gnu/libQt5OpenGLExtensions.prl:
 /usr/lib/x86_64-linux-gnu/libQt5Gui.prl:
 /usr/lib/x86_64-linux-gnu/libQt5Core.prl:
 qmake: FORCE
@@ -326,8 +332,8 @@ distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents inc/Character.h inc/MainWidget.h inc/MainWindow.h inc/Model.h $(DISTDIR)/
-	$(COPY_FILE) --parents src/Character.cpp src/Main.cpp src/MainWidget.cpp src/MainWindow.cpp src/Model.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents inc/Character.h inc/MainWidget.h inc/MainWindow.h inc/Model.h inc/Reader.h $(DISTDIR)/
+	$(COPY_FILE) --parents src/Character.cpp src/Main.cpp src/MainWidget.cpp src/MainWindow.cpp src/Model.cpp src/Reader.cpp $(DISTDIR)/
 
 
 clean: compiler_clean 
@@ -362,10 +368,11 @@ generated_files/moc_predefs.h: /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/da
 compiler_moc_header_make_all: generated_files/moc_MainWidget.cpp
 compiler_moc_header_clean:
 	-$(DEL_FILE) generated_files/moc_MainWidget.cpp
-generated_files/moc_MainWidget.cpp: inc/MainWidget.h \
+generated_files/moc_MainWidget.cpp: inc/Model.h \
+		inc/MainWidget.h \
 		generated_files/moc_predefs.h \
 		/usr/lib/qt5/bin/moc
-	/usr/lib/qt5/bin/moc $(DEFINES) --include generated_files/moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/home/bean/Documents/comp3811/cwk2 -I/home/bean/Documents/comp3811/cwk2 -I/home/bean/Documents/comp3811/cwk2/src -I/home/bean/Documents/comp3811/cwk2/inc -I/opt/local/include -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtOpenGL -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/7 -I/usr/include/x86_64-linux-gnu/c++/7 -I/usr/include/c++/7/backward -I/usr/lib/gcc/x86_64-linux-gnu/7/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include inc/MainWidget.h -o generated_files/moc_MainWidget.cpp
+	/usr/lib/qt5/bin/moc $(DEFINES) --include generated_files/moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/home/bean/Documents/comp3811/cwk2 -I/home/bean/Documents/comp3811/cwk2 -I/home/bean/Documents/comp3811/cwk2/src -I/home/bean/Documents/comp3811/cwk2/inc -I/opt/local/include -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtOpenGL -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtOpenGLExtensions -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/7 -I/usr/include/x86_64-linux-gnu/c++/7 -I/usr/include/c++/7/backward -I/usr/lib/gcc/x86_64-linux-gnu/7/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include inc/MainWidget.h -o generated_files/moc_MainWidget.cpp
 
 compiler_moc_source_make_all:
 compiler_moc_source_clean:
@@ -385,18 +392,25 @@ generated_files/Character.o: src/Character.cpp
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o generated_files/Character.o src/Character.cpp
 
 generated_files/Main.o: src/Main.cpp inc/MainWindow.h \
-		inc/MainWidget.h
+		inc/MainWidget.h \
+		inc/Model.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o generated_files/Main.o src/Main.cpp
 
-generated_files/MainWidget.o: src/MainWidget.cpp inc/MainWidget.h
+generated_files/MainWidget.o: src/MainWidget.cpp inc/MainWidget.h \
+		inc/Model.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o generated_files/MainWidget.o src/MainWidget.cpp
 
 generated_files/MainWindow.o: src/MainWindow.cpp inc/MainWindow.h \
-		inc/MainWidget.h
+		inc/MainWidget.h \
+		inc/Model.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o generated_files/MainWindow.o src/MainWindow.cpp
 
-generated_files/Model.o: src/Model.cpp 
+generated_files/Model.o: src/Model.cpp inc/Reader.h \
+		inc/Model.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o generated_files/Model.o src/Model.cpp
+
+generated_files/Reader.o: src/Reader.cpp inc/Reader.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o generated_files/Reader.o src/Reader.cpp
 
 generated_files/moc_MainWidget.o: generated_files/moc_MainWidget.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o generated_files/moc_MainWidget.o generated_files/moc_MainWidget.cpp

@@ -26,6 +26,7 @@ MainWindow::MainWindow(QWidget *parent)
 	connect(timer, SIGNAL(timeout()), mainWidget, SLOT(update()));
 	timer->start(1000/60);
 
+
 	// create slider
 	//nVerticesSlider = new QSlider(Qt::Horizontal);
 	//windowLayout->addWidget(nVerticesSlider);

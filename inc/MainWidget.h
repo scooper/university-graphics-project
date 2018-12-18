@@ -3,6 +3,7 @@
 
 #include <QGLWidget>
 #include <QKeyEvent>
+#include "Model.h"
 
 class MainWidget: public QGLWidget
 	{ //
@@ -33,12 +34,14 @@ class MainWidget: public QGLWidget
 
 	int keyPresses[5] = {0, 0, 0, 0, 0};
 	int init_jump_time = 0;
+	int d_time;
 	int time_start;
 	int time_old;
-	int d_time;
 	float velocity = 8.0;
 	float angle = 0.0;
 	float move[3] = {0.0,0.0,0.0};
+
+	Model* model;
 	//void polygon(int, int, int, int);
 
 	}; // class GLPolygonWidget
