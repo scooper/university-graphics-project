@@ -4,8 +4,11 @@
 #include <QGLWidget>
 #include <QMenuBar>
 #include <QSlider>
+#include <QPushButton>
 #include <QBoxLayout>
 #include <QTimer>
+#include <QLabel>
+#include <QSpinBox>
 #include "MainWidget.h"
 
 class MainWindow: public QWidget
@@ -25,14 +28,20 @@ class MainWindow: public QWidget
 
 	// window layout
 	QBoxLayout *windowLayout;
+	QHBoxLayout *fogLayout;
+	QHBoxLayout *worldLayout;
 
 	// beneath that, the main widget
 	MainWidget *mainWidget;
 
 	QTimer *timer;
 	// and a slider for the number of vertices
-	//QSlider *nVerticesSlider;
-
+	QLabel *fogLabel;
+	QSlider *fogSlider;
+	QLabel *worldLabel;
+	QSlider *worldSlider;
+	QPushButton *randomBushesButton;
+	QSpinBox *worldAngleValue;
 	// resets all the interface elements
 	void ResetInterface();
 	};

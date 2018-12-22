@@ -2,6 +2,8 @@
 
 VC for graphics module  
 
+* Made on ubuntu linux.
+
 * Depends on  
   * qt-5  
   * qmake3  
@@ -11,4 +13,6 @@ VC for graphics module
 * Controls  
   * WSAD for movement  
   * Space to jump  
-  * J to attack  
+
+* Sometimes it starts at a strange angle, just move the world angle slider to 0.  
+* Click the window to allow movement with keys.

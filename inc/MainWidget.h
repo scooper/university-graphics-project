@@ -4,6 +4,7 @@
 #include <QGLWidget>
 #include <QKeyEvent>
 #include "Model.h"
+#include "Character.h"
 
 class MainWidget: public QGLWidget
 	{ //
@@ -12,6 +13,11 @@ class MainWidget: public QGLWidget
 
 	public:
 	MainWidget(QWidget *parent);
+
+	public slots:
+	void randomizeBushes();
+	void setFogDensity(int value);
+	void setWorldAngle(int value);
 
 
 	protected:
@@ -31,17 +37,36 @@ class MainWidget: public QGLWidget
 	void movement();
 	void grid(int halfGridSize);
 	void jump();
+	void drawWorld();
+	void earth();
+
+	GLuint sptexId;
 
 	int keyPresses[5] = {0, 0, 0, 0, 0};
 	int init_jump_time = 0;
 	int d_time;
 	int time_start;
 	int time_old;
-	float velocity = 8.0;
+	float velocity = 10.0;
 	float angle = 0.0;
 	float move[3] = {0.0,0.0,0.0};
 
+	float fogDens;
+	int worldAngle;
+	int spinnyAngle = 0;
+
 	Model* model;
+	Model* floor;
+	Model* path;
+	Model* box;
+	Model* sky;
+	Model* treeTrunk;
+	Model* treeLeaves;
+	Model *building;
+	Character* character;
+
+	static const int NUM_BUSHES = 100;
+	float randomBushPos[2][NUM_BUSHES] = {0};
 	//void polygon(int, int, int, int);
 
 	}; // class GLPolygonWidget

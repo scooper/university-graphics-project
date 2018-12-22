@@ -51,12 +51,14 @@ OBJECTS_DIR   = generated_files/
 ####### Files
 
 SOURCES       = src/Character.cpp \
+		src/Image.cpp \
 		src/Main.cpp \
 		src/MainWidget.cpp \
 		src/MainWindow.cpp \
 		src/Model.cpp \
 		src/Reader.cpp generated_files/moc_MainWidget.cpp
 OBJECTS       = generated_files/Character.o \
+		generated_files/Image.o \
 		generated_files/Main.o \
 		generated_files/MainWidget.o \
 		generated_files/MainWindow.o \
@@ -137,10 +139,13 @@ DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/yacc.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/lex.prf \
 		cwk2.pro inc/Character.h \
+		inc/Image.h \
 		inc/MainWidget.h \
 		inc/MainWindow.h \
 		inc/Model.h \
-		inc/Reader.h src/Character.cpp \
+		inc/Reader.h \
+		inc/Structs.h src/Character.cpp \
+		src/Image.cpp \
 		src/Main.cpp \
 		src/MainWidget.cpp \
 		src/MainWindow.cpp \
@@ -332,8 +337,8 @@ distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents inc/Character.h inc/MainWidget.h inc/MainWindow.h inc/Model.h inc/Reader.h $(DISTDIR)/
-	$(COPY_FILE) --parents src/Character.cpp src/Main.cpp src/MainWidget.cpp src/MainWindow.cpp src/Model.cpp src/Reader.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents inc/Character.h inc/Image.h inc/MainWidget.h inc/MainWindow.h inc/Model.h inc/Reader.h inc/Structs.h $(DISTDIR)/
+	$(COPY_FILE) --parents src/Character.cpp src/Image.cpp src/Main.cpp src/MainWidget.cpp src/MainWindow.cpp src/Model.cpp src/Reader.cpp $(DISTDIR)/
 
 
 clean: compiler_clean 
@@ -369,6 +374,8 @@ compiler_moc_header_make_all: generated_files/moc_MainWidget.cpp
 compiler_moc_header_clean:
 	-$(DEL_FILE) generated_files/moc_MainWidget.cpp
 generated_files/moc_MainWidget.cpp: inc/Model.h \
+		inc/Image.h \
+		inc/Character.h \
 		inc/MainWidget.h \
 		generated_files/moc_predefs.h \
 		/usr/lib/qt5/bin/moc
@@ -388,28 +395,42 @@ compiler_clean: compiler_moc_predefs_clean compiler_moc_header_clean
 
 ####### Compile
 
-generated_files/Character.o: src/Character.cpp 
+generated_files/Character.o: src/Character.cpp inc/Character.h \
+		inc/Model.h \
+		inc/Image.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o generated_files/Character.o src/Character.cpp
+
+generated_files/Image.o: src/Image.cpp inc/Image.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o generated_files/Image.o src/Image.cpp
 
 generated_files/Main.o: src/Main.cpp inc/MainWindow.h \
 		inc/MainWidget.h \
-		inc/Model.h
+		inc/Model.h \
+		inc/Image.h \
+		inc/Character.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o generated_files/Main.o src/Main.cpp
 
 generated_files/MainWidget.o: src/MainWidget.cpp inc/MainWidget.h \
-		inc/Model.h
+		inc/Model.h \
+		inc/Image.h \
+		inc/Character.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o generated_files/MainWidget.o src/MainWidget.cpp
 
 generated_files/MainWindow.o: src/MainWindow.cpp inc/MainWindow.h \
 		inc/MainWidget.h \
-		inc/Model.h
+		inc/Model.h \
+		inc/Image.h \
+		inc/Character.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o generated_files/MainWindow.o src/MainWindow.cpp
 
 generated_files/Model.o: src/Model.cpp inc/Reader.h \
-		inc/Model.h
+		inc/Structs.h \
+		inc/Model.h \
+		inc/Image.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o generated_files/Model.o src/Model.cpp
 
-generated_files/Reader.o: src/Reader.cpp inc/Reader.h
+generated_files/Reader.o: src/Reader.cpp inc/Reader.h \
+		inc/Structs.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o generated_files/Reader.o src/Reader.cpp
 
 generated_files/moc_MainWidget.o: generated_files/moc_MainWidget.cpp 

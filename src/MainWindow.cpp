@@ -28,8 +28,37 @@ MainWindow::MainWindow(QWidget *parent)
 
 
 	// create slider
-	//nVerticesSlider = new QSlider(Qt::Horizontal);
-	//windowLayout->addWidget(nVerticesSlider);
+	fogLayout = new QHBoxLayout();
+	fogLabel = new QLabel();
+	fogLayout->addWidget(fogLabel);
+	fogLabel->setText("Fog Density");
+	fogSlider = new QSlider(Qt::Horizontal);
+	fogSlider->setRange(0,100);
+	fogLayout->addWidget(fogSlider);
+	windowLayout->addLayout(fogLayout);
+
+
+	worldLayout = new QHBoxLayout();
+	worldLabel = new QLabel();
+	worldLabel->setText("World Angle");
+	worldSlider = new QSlider(Qt::Horizontal);
+	worldSlider->setRange(0, 360);
+	worldAngleValue = new QSpinBox();
+	worldAngleValue->setRange(0,360);
+	worldLayout->addWidget(worldLabel);
+	worldLayout->addWidget(worldSlider);
+	worldLayout->addWidget(worldAngleValue);
+
+	windowLayout->addLayout(worldLayout);
+
+	randomBushesButton = new QPushButton("Randomize Bush Positions");
+	windowLayout->addWidget(randomBushesButton);
+
+	connect(fogSlider, SIGNAL(valueChanged(int)), mainWidget, SLOT(setFogDensity(int)));
+	connect(randomBushesButton, SIGNAL(clicked()), mainWidget, SLOT(randomizeBushes()));
+	connect(worldSlider, SIGNAL(valueChanged(int)), mainWidget, SLOT(setWorldAngle(int)));
+	connect(worldSlider, SIGNAL(valueChanged(int)), worldAngleValue, SLOT(setValue(int)));
+	connect(worldAngleValue, SIGNAL(valueChanged(int)), worldSlider, SLOT(setValue(int)));
 	} // constructor
 
 MainWindow::~MainWindow()
